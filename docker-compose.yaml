@@ -1,0 +1,53 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: data_app
+    env_file:
+      - .env
+    ports:
+      - "${JUPYTER_PORT}:8888"
+    depends_on:
+      - db
+    volumes:
+      - ./src:/app/src
+      - ./notebooks:/app/notebooks
+      - ./data:/app/data
+    command: >
+      jupyter lab
+      --notebook-dir=/app/notebooks
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --allow-root
+      --NotebookApp.token=''
+      --NotebookApp.password=''
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'       # Máximo 1 CPU
+          memory: 2G        # Máximo 2 GB de RAM
+        reservations:
+          cpus: '0.25'
+          memory: 512M
+
+  db:
+    image: postgres:16
+    container_name: data_postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'       # PostgreSQL limitado a media CPU
+          memory: 1G        # Máximo 1 GB
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+
+volumes:
+  postgres_data:

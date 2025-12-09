@@ -1,0 +1,14 @@
+# --- Core Data Analysis ---
+pandas
+pyarrow
+
+# --- Notebooks ---
+jupyter
+ipykernel
+
+# --- Database / ORM ---
+sqlalchemy
+psycopg2-binary      # Para conectar a PostgreSQL
+
+# --- Utilidades ---
+python-dotenv
